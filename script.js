@@ -99,8 +99,23 @@ function loadHLS(videoEl, src){
 }
 function initVideo(){
   const src = 'https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8';
-  loadHLS(document.getElementById('hero-video'), src);
-  loadHLS(document.getElementById('footer-video'), src);
+  const hero = document.getElementById('hero-video');
+  const footer = document.getElementById('footer-video');
+  loadHLS(hero, src);
+  // Footer video uses the same stream — defer it until it's near the viewport
+  if('IntersectionObserver' in window && footer){
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          loadHLS(footer, src);
+          obs.disconnect();
+        }
+      });
+    }, { rootMargin:'600px 0px' });
+    obs.observe(footer);
+  } else if(footer){
+    loadHLS(footer, src);
+  }
 }
 
 /* ───────────────────────────────────────────
@@ -323,7 +338,7 @@ function initWorks(){
   if(!grid) return;
   grid.innerHTML = works.map(w => `
     <div class="work-card reveal">
-      <img src="${w.src}" alt="${w.title}" loading="lazy"/>
+      <img src="${w.src}" alt="${w.title}" loading="lazy" decoding="async"/>
       <div class="work-card-halftone"></div>
       <div class="work-card-hover">
         <div class="work-card-label">View — <em>${w.title}</em></div>
@@ -337,7 +352,7 @@ function initJournal(){
   if(!list) return;
   list.innerHTML = journal.map(j => `
     <div class="journal-item reveal">
-      <img class="journal-img" src="${j.img}" alt=""/>
+      <img class="journal-img" src="${j.img}" alt="" loading="lazy" decoding="async" width="48" height="48"/>
       <div>
         <div class="journal-title">${j.title}</div>
         <div class="journal-meta">${j.meta}</div>
