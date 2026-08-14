@@ -1,4 +1,18 @@
 /* ───────────────────────────────────────────
+   THEME — apply ASAP to avoid dark/light flash
+─────────────────────────────────────────── */
+(function(){
+  let theme = null;
+  try { theme = localStorage.getItem('theme'); } catch(e){}
+  if(!theme){
+    let prefersDark = false;
+    try { prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+    theme = prefersDark ? 'dark' : 'light';
+  }
+  document.documentElement.dataset.theme = theme;
+})();
+
+/* ───────────────────────────────────────────
    LOADING SCREEN
 ─────────────────────────────────────────── */
 (function(){
@@ -24,21 +38,30 @@
   }
   const wordInterval = setInterval(cycleWord, 900);
 
+  let finished = false;
+
+  function finish(){
+    if(finished) return;
+    finished = true;
+    clearInterval(wordInterval);
+    clearTimeout(watchdog);
+    setTimeout(() => {
+      screen.classList.add('hide');
+      setTimeout(() => { screen.style.display='none'; initPage(); }, 600);
+    }, 400);
+  }
+
   function tick(now){
     const elapsed = now - start;
     count = Math.min(100, Math.floor((elapsed / duration) * 100));
     counter.textContent = String(count).padStart(3,'0');
     bar.style.transform = `scaleX(${count/100})`;
-    if(count < 100){
-      requestAnimationFrame(tick);
-    } else {
-      clearInterval(wordInterval);
-      setTimeout(() => {
-        screen.classList.add('hide');
-        setTimeout(() => { screen.style.display='none'; initPage(); }, 600);
-      }, 400);
-    }
+    if(count < 100) requestAnimationFrame(tick);
+    else finish();
   }
+
+  // requestAnimationFrame pauses in background tabs, so guarantee completion
+  const watchdog = setTimeout(finish, duration + 2000);
   requestAnimationFrame(tick);
 })();
 
@@ -71,7 +94,8 @@ function loadHLS(videoEl, src){
   } else if(videoEl.canPlayType('application/vnd.apple.mpegurl')){
     videoEl.src = src;
   }
-  videoEl.play().catch(()=>{});
+  const playPromise = videoEl.play();
+  if(playPromise && playPromise.catch) playPromise.catch(()=>{});
 }
 function initVideo(){
   const src = 'https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8';
@@ -83,20 +107,20 @@ function initVideo(){
    GSAP HERO ENTRANCE
 ─────────────────────────────────────────── */
 function initGSAP(){
+  if(typeof gsap === 'undefined'){
+    // CDN unavailable — reveal hero content that CSS starts hidden
+    document.querySelectorAll('.name-reveal, .blur-in').forEach(el => { el.style.opacity = 1; });
+    return;
+  }
   gsap.registerPlugin(ScrollTrigger);
 
   // Hero entrance
   const tl = gsap.timeline({ defaults:{ ease:'power3.out' } });
-  tl.to('.name-reveal', { opacity:1, y:0, duration:1.2, delay:0.1,
-      from:{ opacity:0, y:50 }
-    })
+  tl.fromTo('.name-reveal', { opacity:0, y:50 }, { opacity:1, y:0, duration:1.2, delay:0.1 })
     .from('.blur-in', {
       opacity:0, filter:'blur(10px)', y:20, duration:1,
       stagger:0.1
     }, '-=0.8');
-
-  // Simultaneously animate hero-btns
-  gsap.from('.hero-btns', { opacity:0, y:20, duration:0.8, delay:1.2, ease:'power3.out' });
 
   // Exploration parallax
   const items = document.querySelectorAll('.explore-item');
@@ -147,6 +171,7 @@ function initRoles(){
    MARQUEE
 ─────────────────────────────────────────── */
 function initMarquee(){
+  if(typeof gsap === 'undefined') return;
   const track = document.getElementById('marquee-track');
   const text = 'BUILDING THE FUTURE • ';
   for(let i=0;i<12;i++){
@@ -166,6 +191,10 @@ function initMarquee(){
 ─────────────────────────────────────────── */
 function initScrollReveal(){
   const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(el => el.classList.add('visible'));
+    return;
+  }
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if(e.isIntersecting){
@@ -250,19 +279,10 @@ function initNavLinks(){
 
 function initThemeToggle(){
   const toggle = document.getElementById('theme-toggle');
-  const storedTheme = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
-
-  const setTheme = (theme) => {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem('theme', theme);
-  };
-
-  setTheme(initialTheme);
   toggle.addEventListener('click', () => {
     const nextTheme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
+    document.documentElement.dataset.theme = nextTheme;
+    try { localStorage.setItem('theme', nextTheme); } catch(e){}
   });
 }
 
