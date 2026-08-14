@@ -33,9 +33,9 @@
     <a class="nav-link" href="#works">Work</a>
     <a class="nav-link" href="#contact">Resume</a>
     <div class="nav-divider"></div>
-    <a href="https://wa.me/8801830962035?text=Hello%20Mizan%20!" target="_blank">
-  <button class="nav-sayhi"><span>Say hi ↗</span></button>
-</a>
+    <a class="nav-sayhi" href="https://wa.me/8801830962035?text=Hello%20Mizan%20!" target="_blank" rel="noopener">
+      <span>Say hi ↗</span>
+    </a>
   </div>
 </nav>
 
@@ -55,8 +55,8 @@
       Designing seamless digital interactions by focusing on the unique nuances which bring systems to life.
     </p>
     <div class="hero-btns blur-in">
-      <button class="btn-primary" onclick="document.getElementById('works').scrollIntoView({behavior:'smooth'})">See Works</button>
-      <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Reach out...</button>
+      <button class="btn-primary" data-scroll="works">See Works</button>
+      <button class="btn-outline" data-scroll="contact">Reach out...</button>
     </div>
   </div>
 
@@ -78,107 +78,14 @@
         <h2 class="section-heading">Featured <em>projects</em></h2>
         <p class="section-subtext">A selection of projects I've worked on, from concept to launch.</p>
       </div>
-      <button class="btn-ghost" onclick="alert('All work coming soon!')">
+      <button class="btn-ghost" data-alert="All work coming soon!">
         <div class="btn-ghost-inner"><span>View all work</span><span>→</span></div>
       </button>
     </div>
 
-    <div class="works-grid">
-      <div class="work-card reveal">
-        <img src="images/IMG_20220505_230456_Original.jpeg" alt="Automotive Motion" loading="lazy"/>
-        <div class="work-card-halftone"></div>
-        <div class="work-card-hover">
-          <div class="work-card-label">View — <em>Automotive Motion</em></div>
-        </div>
-      </div>
-      <div class="work-card reveal">
-        <img src="images/IMG_0554_Original.jpeg" alt="Urban Architecture" loading="lazy"/>
-        <div class="work-card-halftone"></div>
-        <div class="work-card-hover">
-          <div class="work-card-label">View — <em>Urban Architecture</em></div>
-        </div>
-      </div>
-      <div class="work-card reveal">
-        <img src="images/IMG_1523_Original.jpeg" alt="Human Perspective" loading="lazy"/>
-        <div class="work-card-halftone"></div>
-        <div class="work-card-hover">
-          <div class="work-card-label">View — <em>Human Perspective</em></div>
-        </div>
-      </div>
-      <div class="work-card reveal">
-        <img src="images/IMG_2509_Original.jpeg" alt="Brand Identity" loading="lazy"/>
-        <div class="work-card-halftone"></div>
-        <div class="work-card-hover">
-          <div class="work-card-label">View — <em>Brand Identity</em></div>
-        </div>
-      </div>
-    </div>
+    <div class="works-grid" id="works-grid"></div>
   </div>
 </section>
-
-<!-- ❤️❤️❤️ FIFA World Cup 2026 Live Player Start -->
-<div class="wc-live-wrapper" style="max-width: 850px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0d0e12; color: #ffffff; padding: 20px; border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.6); border: 1px solid #1f222e; text-align: center;">
-    
-    <!-- Header Section -->
-    <div style="margin-bottom: 20px;">
-        <span style="background: #e91e63; color: #fff; padding: 5px 12px; font-size: 12px; font-weight: bold; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 10px; animation: pulse 2s infinite;">🔴 LIVE</span>
-        <h2 style="margin: 0 0 8px 0; color: #00ffcc; font-size: 26px; font-weight: 700;">🏆 ফিফা ফুটবল বিশ্বকাপ ২০২৬ লাইভ দেখুন এখানে 🏆</h2>
-        <p style="margin: 0; color: #a0a5b5; font-size: 15px;">হাই-কোয়ালিটি স্মুথ স্ট্রিমিংয়ে উপভোগ করুন আজকের হাই-ভোল্টেজ ম্যাচ</p>
-    </div>
-
-    <!-- Video Player Container (16:9 Aspect Ratio) -->
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);">
-        <video id="fifa-live-player" controls autoplay muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></video>
-    </div>
-
-    <!-- Footer / Features Note -->
-    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; color: #767d93;">
-        <span>⚡ লো-বাফারিং</span>
-        <span>•</span>
-        <span>📺 ফুল এইচডি (HD)</span>
-        <span>•</span>
-        <span>📱 মোবাইল ফ্রেন্ডলি</span>
-    </div>
-
-    <!-- HLS Stream Script -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var video = document.getElementById('fifa-live-player');
-            var videoSrc = 'https://d1jzu95oc8fgt3.cloudfront.net/FOX_Sports1080p.m3u8';
-            
-            if (Hls.isSupported()) {
-                var hls = new Hls({
-                    maxMaxBufferLength: 10 // বাফারিং কমানোর জন্য অপটিমাইজেশন
-                });
-                hls.loadSource(videoSrc);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(function(e) {
-                        console.log("Autoplay prevented, user interaction needed.");
-                    });
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Safari বা iOS ডিভাইসের জন্য নেটিভ সাপোর্ট
-                video.src = videoSrc;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
-                });
-            }
-        });
-    </script>
-
-    <!-- CSS Animation for Live Tag -->
-    <style>
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(233, 30, 99, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(233, 30, 99, 0); }
-        }
-    </style>
-</div>
-<!-- ❤️❤️❤️ FIFA World Cup 2026 Live Player End -->
-
 
 <!-- Journal -->
 <section id="journal" style="background:var(--bg); padding: 3rem 0;">
@@ -192,45 +99,12 @@
         <h2 class="section-heading">Recent <em>thoughts</em></h2>
         <p class="section-subtext">Perspectives on design, technology, and the spaces between.</p>
       </div>
-      <button class="btn-ghost" onclick="alert('All articles coming soon!')">
+      <button class="btn-ghost" data-alert="All articles coming soon!">
         <div class="btn-ghost-inner"><span>View all</span><span>→</span></div>
       </button>
     </div>
 
-    <div class="journal-list">
-      <div class="journal-item reveal">
-        <img class="journal-img" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=200&q=80" alt=""/>
-        <div>
-          <div class="journal-title">The nuance of micro-interactions in modern UI</div>
-          <div class="journal-meta">5 min read · Jan 2026</div>
-        </div>
-        <span class="journal-arrow">↗</span>
-      </div>
-      <div class="journal-item reveal">
-        <img class="journal-img" src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=200&q=80" alt=""/>
-        <div>
-          <div class="journal-title">Why restraint is the hardest design skill to master</div>
-          <div class="journal-meta">7 min read · Dec 2025</div>
-        </div>
-        <span class="journal-arrow">↗</span>
-      </div>
-      <div class="journal-item reveal">
-        <img class="journal-img" src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=200&q=80" alt=""/>
-        <div>
-          <div class="journal-title">Building for the next billion users</div>
-          <div class="journal-meta">4 min read · Nov 2025</div>
-        </div>
-        <span class="journal-arrow">↗</span>
-      </div>
-      <div class="journal-item reveal">
-        <img class="journal-img" src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=200&q=80" alt=""/>
-        <div>
-          <div class="journal-title">The invisible architecture of great products</div>
-          <div class="journal-meta">6 min read · Oct 2025</div>
-        </div>
-        <span class="journal-arrow">↗</span>
-      </div>
-    </div>
+    <div class="journal-list" id="journal-list"></div>
   </div>
 </section>
 
@@ -254,22 +128,22 @@
   </div>
 
   <div class="explore-gallery" id="explore-gallery">
-    <div class="explore-item" data-img="images/mizan1.JPG">
+    <div class="explore-item" data-img="images/20220410_021706_Original.png">
       <img src="images/20220410_021706_Original.png" alt="" loading="lazy"/>
     </div>
-    <div class="explore-item" data-img="images/mizan1.JPG">
+    <div class="explore-item" data-img="images/IMG_0485_Original.jpeg">
       <img src="images/IMG_0485_Original.jpeg" alt="" loading="lazy"/>
     </div>
-    <div class="explore-item" data-img="images/mizan1.JPG">
+    <div class="explore-item" data-img="images/IMG_1864_Original.jpeg">
       <img src="images/IMG_1864_Original.jpeg" alt="" loading="lazy"/>
     </div>
-    <div class="explore-item" data-img="images/mizan1.JPG">
+    <div class="explore-item" data-img="images/IMG_2012.jpeg">
       <img src="images/IMG_2012.jpeg" alt="" loading="lazy"/>
     </div>
-    <div class="explore-item" data-img="images/mizan1.JPG">
+    <div class="explore-item" data-img="images/IMG_2473_Original.jpeg">
       <img src="images/IMG_2473_Original.jpeg" alt="" loading="lazy"/>
     </div>
-    <div class="explore-item" data-img="images/mizan1.JPG">
+    <div class="explore-item" data-img="images/IMG_2489_Original.jpeg">
       <img src="images/IMG_2489_Original.jpeg" alt="" loading="lazy"/>
     </div>
   </div>
@@ -319,7 +193,7 @@
         <a class="footer-social" href="#">Facebook</a>
         <a class="footer-social" href="#">LinkedIn</a>
         <a class="footer-social" href="#">Youtube</a>
-        <a class="footer-social" href="#">GitHub</a>
+        <a class="footer-social" href="https://github.com/mizaaaan" target="_blank" rel="noopener">GitHub</a>
       </div>
       <div class="footer-available">
         <div class="status-dot"></div>
@@ -331,7 +205,7 @@
 
 <!-- Lightbox -->
 <div id="lightbox">
-  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button id="lightbox-close">✕</button>
   <img id="lightbox-img" src="" alt=""/>
 </div>
 

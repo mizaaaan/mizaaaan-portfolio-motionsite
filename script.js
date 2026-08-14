@@ -50,11 +50,14 @@ function initPage(){
   initGSAP();
   initRoles();
   initMarquee();
+  initWorks();
+  initJournal();
   initScrollReveal();
   initLightbox();
   initNavScroll();
   initNavLinks();
   initThemeToggle();
+  initButtons();
 }
 
 /* ───────────────────────────────────────────
@@ -188,6 +191,7 @@ function initLightbox(){
   document.getElementById('lightbox').addEventListener('click', function(e){
     if(e.target === this) closeLightbox();
   });
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 }
 function closeLightbox(){
   document.getElementById('lightbox').classList.remove('open');
@@ -260,4 +264,65 @@ function initThemeToggle(){
     const nextTheme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     setTheme(nextTheme);
   });
+}
+
+/* ───────────────────────────────────────────
+   BUTTONS (data-scroll / data-alert)
+─────────────────────────────────────────── */
+function initButtons(){
+  document.querySelectorAll('[data-scroll]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.scroll;
+      if(target) document.getElementById(target)?.scrollIntoView({ behavior:'smooth' });
+    });
+  });
+  document.querySelectorAll('[data-alert]').forEach(btn => {
+    btn.addEventListener('click', () => alert(btn.dataset.alert));
+  });
+}
+
+/* ───────────────────────────────────────────
+   CONTENT — Works & Journal (data-driven)
+─────────────────────────────────────────── */
+const works = [
+  { src: 'images/IMG_20220505_230456_Original.jpeg', title: 'Automotive Motion' },
+  { src: 'images/IMG_0554_Original.jpeg', title: 'Urban Architecture' },
+  { src: 'images/IMG_1523_Original.jpeg', title: 'Human Perspective' },
+  { src: 'images/IMG_2509_Original.jpeg', title: 'Brand Identity' }
+];
+
+const journal = [
+  { img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=200&q=80', title: 'The nuance of micro-interactions in modern UI', meta: '5 min read · Jan 2026' },
+  { img: 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=200&q=80', title: 'Why restraint is the hardest design skill to master', meta: '7 min read · Dec 2025' },
+  { img: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=200&q=80', title: 'Building for the next billion users', meta: '4 min read · Nov 2025' },
+  { img: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=200&q=80', title: 'The invisible architecture of great products', meta: '6 min read · Oct 2025' }
+];
+
+function initWorks(){
+  const grid = document.getElementById('works-grid');
+  if(!grid) return;
+  grid.innerHTML = works.map(w => `
+    <div class="work-card reveal">
+      <img src="${w.src}" alt="${w.title}" loading="lazy"/>
+      <div class="work-card-halftone"></div>
+      <div class="work-card-hover">
+        <div class="work-card-label">View — <em>${w.title}</em></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function initJournal(){
+  const list = document.getElementById('journal-list');
+  if(!list) return;
+  list.innerHTML = journal.map(j => `
+    <div class="journal-item reveal">
+      <img class="journal-img" src="${j.img}" alt=""/>
+      <div>
+        <div class="journal-title">${j.title}</div>
+        <div class="journal-meta">${j.meta}</div>
+      </div>
+      <span class="journal-arrow">↗</span>
+    </div>
+  `).join('');
 }
