@@ -1,5 +1,5 @@
 ## Hi there 👋
-https://mizaaaan.github.io/mizaaaan-portfolio-motionsite/
+https://mizaaaan.github.io/mizaaaan
 <!--
 **mizaaaan/mizaaaan** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
