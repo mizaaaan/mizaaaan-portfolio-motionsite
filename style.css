@@ -90,7 +90,7 @@ body {
 .nav-pill {
   display: inline-flex; align-items: center; gap: 0;
   border-radius: 9999px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--stroke);
   background: var(--surface);
   backdrop-filter: blur(12px);
   padding: 0.5rem;
@@ -434,7 +434,7 @@ body {
   display: grid; grid-template-columns: repeat(2,1fr);
   gap: 3rem 5rem; max-width: 900px;
   margin: 0 auto; pointer-events: none;
-  z-index: 20;
+  z-index: 1;
 }
 @media(min-width:768px){ .explore-gallery { gap: 3rem 10rem; } }
 
